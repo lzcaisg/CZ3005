@@ -3,7 +3,7 @@
 % School of Computer Science and Engineering,
 % For CZ3005 Lab-1, Oct/2018
 
-% ============ Definitions  ============ %
+% ============ Definitions for Question-1  ============ %
 % male(jerry).
 % male(stuart).
 % male(warren).
@@ -18,19 +18,19 @@
 % brother(jerry,kather).
 % brother(peter, warren).
 
-
 % sister(ann, mayalice).
 % sister(kather,jerry).
-
 
 % parent_of(warren,jerry).
 % parent_of(maryalice,jerry).
 % parent_of(grandpa, warren).
 
+
+% ============ Definitions for Question-2  ============ %
+
 brother(peter, warren).
 brother(jerry,kather).
 brother(jerry,stuart).
-
 male(stuart).
 male(peter).
 male(warren).
@@ -54,8 +54,6 @@ atomic_sibling(X,Y) :-
     sister(Y,X), Y\=X.
 
 check_sibling(X, Y, List) :-
-    % X \= Y, % In case run into some stupid recursion.
-
     atomic_sibling(X, Sibling_of_X), % If you find a sibling of X,
     not(member(Sibling_of_X, List)), % And this sibling of X is not seen before,
     (
@@ -64,9 +62,6 @@ check_sibling(X, Y, List) :-
 
 
 sibling(X, Y) :- check_sibling(X, Y, []).
-
-% parent_of(Parent, UnknownKid) :- sibling(UnknownKid, KnownKid),
-% (father(Parent, KnownKid);mother(Parent, KnownKid)).
 
 
 all_parent_of(Parent, Kid) :-
@@ -90,5 +85,6 @@ uncle(Uncle, Kid) :- all_parent_of(Parent, Kid), brother(Uncle, Parent).
 
 cousin(Kid1, Kid2) :- (aunt(Parent, Kid2); uncle(Parent,Kid2)), all_parent_of(Parent, Kid1).
 
-spouse(Father, Mother) :- father(Father, Kid), mother(Mother, Kid).
+spouse(First, Second) :- father(First, Kid), mother(Second, Kid);
+                         mother(First, Kid), father(Second, Kid).
 
