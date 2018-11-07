@@ -40,7 +40,7 @@ nation(Matt_Biondi, United_States).
 nation(Vera_Caslavska, Czechoslovakia).
 sport(Michael_Phelps, Swimming).
 sport(Larisa_Latynina, Gymnastics).
-sport(Marit_Bjorgen, Cross-country_skiing).
+sport(Marit_Bjorgen, Cross_country_skiing).
 sport(Nikolai_Andrianov, Gymnastics).
 sport(Ole_Einar_Bjorndalen, Biathlon).
 sport(Boris_Shakhlin, Gymnastics).
@@ -48,7 +48,7 @@ sport(Edoardo_Mangiarotti, Fencing).
 sport(Takashi_Ono, Gymnastics).
 sport(Paavo_Nurmi, Athletics).
 sport(Birgit_Fischer, Canoeing).
-sport(Bjorn_Daehlie, Cross-country_skiing).
+sport(Bjorn_Daehlie, Cross_country_skiing).
 sport(Sawao_Kato, Gymnastics).
 sport(Jenny_Thompson, Swimming).
 sport(Ryan_Lochte, Swimming).
