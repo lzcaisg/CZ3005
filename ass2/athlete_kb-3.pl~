@@ -231,9 +231,9 @@ checkZero(X) :-
     (   X =< 0,
         write("The Question Count has Reached."),
         fail);
-    (   X=1,
+    ((   X=1,
         write("One Last Chance."));
-    X>1.
+      true).
 
 updateCount :-
     assert(count(10)),

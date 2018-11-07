@@ -219,4 +219,20 @@ total_no(Mark_Spitz, 11).
 total_no(Matt_Biondi, 11).
 total_no(Vera_Caslavska, 11).
 
+athlete_list([Michael_Phelps, Larisa_Latynina, Marit_Bjorgen, Nikolai_Andrianov, Ole_Einar_Bjorndalen, Boris_Shakhlin, Edoardo_Mangiarotti, Takashi_Ono, Paavo_Nurmi, Birgit_Fischer, Bjorn_Daehlie, Sawao_Kato, Jenny_Thompson, Ryan_Lochte, Dara_Torres, Alexei_Nemov, Natalie_Coughlin, Mark_Spitz, Matt_Biondi, Vera_Caslavska]).
+
+prob_list([0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05]).
+
+choice([X|_], [P|_], Cumul, Rand, X) :-
+    Rand < Cumul + P.
+choice([_|Xs], [P|Ps], Cumul, Rand, Y) :-
+    Cumul1 is Cumul + P,
+    Rand >= Cumul1,
+    choice(Xs, Ps, Cumul1, Rand, Y).
+choice([X], [P], Cumul, Rand, X) :-
+    Rand < Cumul + P.
+choice(Xs, Ps, Y) :- random(R), choice(Xs, Ps, 0, R, Y).
+
+
+start(0):- choice(athlete_list, prob_list, chosen_athlete).
 
