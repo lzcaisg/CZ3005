@@ -220,20 +220,26 @@ total_no(matt_biondi, 11).
 total_no(vera_caslavska, 11).
 
 % is(Athlete): the program decided the athlete.
+:- dynamic is/1.
+:- dynamic count/1.
+
 is(nobody).
-count(10).
+nameList([michael_phelps, larisa_latynina, marit_bjorgen, nikolai_andrianov, ole_einar_bjorndalen, boris_shakhlin, edoardo_mangiarotti, takashi_ono, paavo_nurmi, birgit_fischer, bjorn_daehlie, sawao_kato, jenny_thompson, ryan_lochte, dara_torres, alexei_nemov, natalie_coughlin, mark_spitz, matt_biondi, vera_caslavska]).
 % ============== Counter ============== %
 lowestCount(X) :-
     count(X),
     \+ (count(Y), Y < X).
 
 checkZero(X) :-
-    (   X < 0,
-        write("The Question Count has Reached."),
+    (   X =< -1,
+        write("The Question Count has Reached."),nl,
+        is(Athlete),
+        write("The Answer is: "),
+        write(Athlete),
         fail);
-    (   X=2,
+    (   X=1,
         write("One Last Chance."));
-     X>=1.
+     X>=0.
 
 updateCount :-
     assert(count(10)),
@@ -241,22 +247,44 @@ updateCount :-
     integer(X),
     X1 is X-1,
     checkZero(X1),
-    assert(count(X1)).
+    assert(count(X1)),
+    write("You have "),
+    write(X1),
+    write(" chances remaining").
 
-userCheck :-
-        write("You can Query from the Following Fields:"),
-        write("rank: The athlete's world ranking regarding his/her total medal number."),
-        write("nation: The nation of the athlete."),
-        write("sport: The sport that the athlete played."),
-        write("start_year: The first year that this athlete participated in the Olympic Game."),
-        write("end_year: The last year that this athlete participated in the Olympic Game."),
-        write("active_year: The year in which the athlete was active."),
-        write("season: The type of Olympic (summer/winter)."),
-        write("gender: The gender of the athlete (m/f)."),
-        write("gold_no: The number of gold medal."),
-        write("silver_no: The number of silver medal."),
-        write("bronze_no: The number of bronze medal."),
-        write("total_no: The total number of medal.").
+choose(List, Elt) :-
+    length(List, Length),
+    random(0, Length, Index),
+    nth0(Index, List, Elt).
+
+
+start :-
+    retractall(is(X)),
+    retractall(count(X)),
+    assert(count(10)),
+    nameList(TheNameList),
+    choose(TheNameList, Athlete),
+    assert(is(Athlete)),
+
+    write("******************************"),nl,
+    write("We will start the ten question game. Please refer to the website below and try to guess one athlete among the TOP 20."),nl,nl,
+    write("https://en.wikipedia.org/wiki/List_of_multiple_Olympic_medalists"),nl,nl,
+
+    write("You can Query from the Following Fields using [userCheck(Item, Value)]:"), nl,nl,
+    write("- rank: The athlete's world ranking regarding his/her total medal number."), nl,
+    write("- nation: The nation of the athlete."), nl,
+    write("- sport: The sport that the athlete played."),nl,
+    write("- start_year: The first year that this athlete participated in the Olympic Game."), nl,
+    write("- end_year: The last year that this athlete participated in the Olympic Game."), nl,
+    write("- active_year: The year in which the athlete was active."), nl,
+    write("- season: The type of Olympic (summer/winter)."), nl,
+    write("- gender: The gender of the athlete (m/f)."), nl,
+    write("- gold_no: The number of gold medal."), nl,
+    write("- silver_no: The number of silver medal."), nl,
+    write("- bronze_no: The number of bronze medal."), nl,
+    write("- total_no: The total number of medal."), nl,nl,
+    write("You may start guessing now. All the best."),nl,
+    write("******************************").
 
 userCheck(Item, Value):-
     updateCount,
