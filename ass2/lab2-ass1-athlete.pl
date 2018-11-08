@@ -1,3 +1,4 @@
+% =========== 1. Initiate Data =========== %
 rank(michael_phelps, 1).
 rank(larisa_latynina, 2).
 rank(marit_bjorgen, 3).
@@ -219,35 +220,38 @@ total_no(mark_spitz, 11).
 total_no(matt_biondi, 11).
 total_no(vera_caslavska, 11).
 
-% is(Athlete): the program decided the athlete.
+% =========== 2. Declare Dynamic Procedure =========== %
+% is(Athlete): the program will decide the athlete.
+% count(int): the total count of queries uesd.
 :- dynamic is/1.
 :- dynamic count/1.
 
 is(nobody).
 nameList([michael_phelps, larisa_latynina, marit_bjorgen, nikolai_andrianov, ole_einar_bjorndalen, boris_shakhlin, edoardo_mangiarotti, takashi_ono, paavo_nurmi, birgit_fischer, bjorn_daehlie, sawao_kato, jenny_thompson, ryan_lochte, dara_torres, alexei_nemov, natalie_coughlin, mark_spitz, matt_biondi, vera_caslavska]).
-% ============== Counter ============== %
+
+% =========== 3. Set Counter ===========  %
 lowestCount(X) :-
-    count(X),
-    \+ (count(Y), Y < X).
+    count(X),             % X will be the smallest, if...
+    \+ (count(Y), Y < X). % ... there does not exist another Y that is smaller than X.
 
 checkZero(X) :-
-    (   X =< -1,
+    (   X =< -1, % If the 10 chances has been used up.
         write("The Question Count has Reached."),nl,
         is(Athlete),
         write("The Answer is: "),
         write(Athlete),
         fail);
-    (   X=1,
+    (   X=1, % Else: if there is 1 last chance remaining: Set Reminder
         write("One Last Chance."));
      X>=0.
 
 updateCount :-
     assert(count(10)),
-    lowestCount(X),
+    lowestCount(X), % Search for the lowest count so far
     integer(X),
     X1 is X-1,
-    checkZero(X1),
-    assert(count(X1)),
+    checkZero(X1), % Check whether the next count reaches 0: If so returns false.
+    assert(count(X1)), % Update the latest count.
     write("You have "),
     write(X1),
     write(" chances remaining").
@@ -257,7 +261,7 @@ choose(List, Elt) :-
     random(0, Length, Index),
     nth0(Index, List, Elt).
 
-
+% =========== 4. Set the Starter and Query Procedure ===========  %
 start :-
     retractall(is(X)),
     retractall(count(X)),
@@ -267,7 +271,7 @@ start :-
     assert(is(Athlete)),
 
     write("******************************"),nl,
-    write("We will start the ten question game. Please refer to the website below and try to guess one athlete among the TOP 20."),nl,
+    write("We will start the ten question game. Please refer to the website below and try to guess one athlete among the TOP 20."),nl,nl,
     write("https://en.wikipedia.org/wiki/List_of_multiple_Olympic_medalists"),nl,nl,
 
     write("You can Query from the Following Fields using [userCheck(Item, Value)]:"), nl,nl,
@@ -290,7 +294,7 @@ userCheck(Item, Value):-
     updateCount,
     check(Item, Value).
 
-% ===================================== %
+%=========== 5. Define all the atomic check logic =========== %
 
 check(rank, Rank):-
     is(Athlete),

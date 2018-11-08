@@ -1,3 +1,6 @@
+% =========== 1. Initiate Data =========== %
+% rank: The golbal ranking of the athlete
+%       in terms of total number of medals.
 rank(michael_phelps, 1).
 rank(larisa_latynina, 2).
 rank(marit_bjorgen, 3).
@@ -18,6 +21,8 @@ rank(natalie_coughlin, 17).
 rank(mark_spitz, 18).
 rank(matt_biondi, 19).
 rank(vera_caslavska, 20).
+
+% nation: The nationality of the athlete.
 nation(michael_phelps, united_states).
 nation(larisa_latynina, soviet_union).
 nation(marit_bjorgen, norway).
@@ -38,6 +43,8 @@ nation(natalie_coughlin, united_states).
 nation(mark_spitz, united_states).
 nation(matt_biondi, united_states).
 nation(vera_caslavska, czechoslovakia).
+
+% sport: The sport that the athlete plays.
 sport(michael_phelps, swimming).
 sport(larisa_latynina, gymnastics).
 sport(marit_bjorgen, cross_country_skiing).
@@ -58,6 +65,9 @@ sport(natalie_coughlin, swimming).
 sport(mark_spitz, swimming).
 sport(matt_biondi, swimming).
 sport(vera_caslavska, gymnastics).
+
+% start_year: The first time the athlete participated
+%             in the Olympic Game.
 start_year(michael_phelps, 2004).
 start_year(larisa_latynina, 1956).
 start_year(marit_bjorgen, 2002).
@@ -78,6 +88,8 @@ start_year(natalie_coughlin, 2004).
 start_year(mark_spitz, 1968).
 start_year(matt_biondi, 1984).
 start_year(vera_caslavska, 1960).
+
+% end_year: The year that the athlete retired.
 end_year(michael_phelps, 2016).
 end_year(larisa_latynina, 1964).
 end_year(marit_bjorgen, 2018).
@@ -98,6 +110,8 @@ end_year(natalie_coughlin, 2012).
 end_year(mark_spitz, 1972).
 end_year(matt_biondi, 1992).
 end_year(vera_caslavska, 1968).
+
+% season: The type of Olympic Game (summer/winter)
 season(michael_phelps, summer).
 season(larisa_latynina, summer).
 season(marit_bjorgen, winter).
@@ -118,6 +132,8 @@ season(natalie_coughlin, summer).
 season(mark_spitz, summer).
 season(matt_biondi, summer).
 season(vera_caslavska, summer).
+
+% gender: The gender of the athlete (m/f).
 gender(michael_phelps, m).
 gender(larisa_latynina, f).
 gender(marit_bjorgen, f).
@@ -138,6 +154,8 @@ gender(natalie_coughlin, f).
 gender(mark_spitz, m).
 gender(matt_biondi, m).
 gender(vera_caslavska, f).
+
+% gold_no: The number of gold medal.
 gold_no(michael_phelps, 23).
 gold_no(larisa_latynina, 9).
 gold_no(marit_bjorgen, 8).
@@ -158,6 +176,8 @@ gold_no(natalie_coughlin, 3).
 gold_no(mark_spitz, 9).
 gold_no(matt_biondi, 8).
 gold_no(vera_caslavska, 7).
+
+% silver_no: The number of silver medal.
 silver_no(michael_phelps, 3).
 silver_no(larisa_latynina, 5).
 silver_no(marit_bjorgen, 4).
@@ -178,6 +198,8 @@ silver_no(natalie_coughlin, 4).
 silver_no(mark_spitz, 1).
 silver_no(matt_biondi, 2).
 silver_no(vera_caslavska, 4).
+
+% bronze_no: The number of bronze medal.
 bronze_no(michael_phelps, 2).
 bronze_no(larisa_latynina, 4).
 bronze_no(marit_bjorgen, 3).
@@ -198,6 +220,8 @@ bronze_no(natalie_coughlin, 5).
 bronze_no(mark_spitz, 1).
 bronze_no(matt_biondi, 1).
 bronze_no(vera_caslavska, 0).
+
+% total_no: The total number of medal.
 total_no(michael_phelps, 28).
 total_no(larisa_latynina, 18).
 total_no(marit_bjorgen, 15).
@@ -219,35 +243,41 @@ total_no(mark_spitz, 11).
 total_no(matt_biondi, 11).
 total_no(vera_caslavska, 11).
 
-% is(Athlete): the program decided the athlete.
+% =========== 2. Declare Dynamic Procedure =========== %
+% is(Athlete): the program will decide the athlete.
+% count(int): the total count of queries uesd.
 :- dynamic is/1.
 :- dynamic count/1.
 
 is(nobody).
 nameList([michael_phelps, larisa_latynina, marit_bjorgen, nikolai_andrianov, ole_einar_bjorndalen, boris_shakhlin, edoardo_mangiarotti, takashi_ono, paavo_nurmi, birgit_fischer, bjorn_daehlie, sawao_kato, jenny_thompson, ryan_lochte, dara_torres, alexei_nemov, natalie_coughlin, mark_spitz, matt_biondi, vera_caslavska]).
-% ============== Counter ============== %
+
+% =========== 3. Set Counter ===========  %
 lowestCount(X) :-
-    count(X),
-    \+ (count(Y), Y < X).
+% To find the lowest count of userCheck, in order to determine how many chances left
+    count(X),             % X will be the smallest, if...
+    \+ (count(Y), Y < X). % ... there does not exist another Y that is smaller than X.
 
 checkZero(X) :-
-    (   X =< -1,
+% Check whether the remaining chances reaches zero.
+    (   X =< -1, % If the 10 chances has been used up.
         write("The Question Count has Reached."),nl,
         is(Athlete),
         write("The Answer is: "),
         write(Athlete),
         fail);
-    (   X=1,
+    (   X=1, % Else: if there is 1 last chance remaining: Set Reminder
         write("One Last Chance."));
      X>=0.
 
 updateCount :-
+
     assert(count(10)),
-    lowestCount(X),
+    lowestCount(X), % Search for the lowest count so far
     integer(X),
     X1 is X-1,
-    checkZero(X1),
-    assert(count(X1)),
+    checkZero(X1), % Check whether the next count reaches 0: If so returns false.
+    assert(count(X1)), % Update the latest count.
     write("You have "),
     write(X1),
     write(" chances remaining").
@@ -257,7 +287,7 @@ choose(List, Elt) :-
     random(0, Length, Index),
     nth0(Index, List, Elt).
 
-
+% =========== 4. Set the Starter and Query Procedure ===========  %
 start :-
     retractall(is(X)),
     retractall(count(X)),
@@ -290,7 +320,7 @@ userCheck(Item, Value):-
     updateCount,
     check(Item, Value).
 
-% ===================================== %
+%=========== 5. Define all the atomic check logic =========== %
 
 check(rank, Rank):-
     is(Athlete),
