@@ -264,17 +264,17 @@ choose(List, Elt) :-
 % =========== 4. Set the Starter and Query Procedure ===========  %
 start :-
     retractall(is(X)),
-    retractall(count(X)),
-    assert(count(10)),
+    retractall(count(X)), % Clean up the Memory
+    assert(count(10)), % Reset the Counter 
     nameList(TheNameList),
-    choose(TheNameList, Athlete),
-    assert(is(Athlete)),
+    choose(TheNameList, Athlete), % Randomly pick an athlete
+    assert(is(Athlete)), % Record the Athlete into the buffer
 
     write("******************************"),nl,
     write("We will start the ten question game. Please refer to the website below and try to guess one athlete among the TOP 20."),nl,nl,
     write("https://en.wikipedia.org/wiki/List_of_multiple_Olympic_medalists"),nl,nl,
 
-    write("You can Query from the Following Fields using [userCheck(Item, Value)]:"), nl,nl,
+    write("You can query from the following fields using [userCheck(Item, Value)]:"), nl,nl,
     write("- rank: The athlete's world ranking regarding his/her total medal number."), nl,
     write("- nation: The nation of the athlete."), nl,
     write("- sport: The sport that the athlete played."),nl,
